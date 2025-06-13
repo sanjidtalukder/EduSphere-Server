@@ -56,6 +56,26 @@ async function run() {
       res.send(result);
     });
 
+    // Top Contributors API (Sorted by number of articles)
+    
+app.get('/top-contributors', async (req, res) => {
+  const pipeline = [
+    {
+      $group: {
+        _id: "$author_email",
+        name: { $first: "$author_name" },
+        photo: { $first: "$author_photo" },
+        totalArticles: { $sum: 1 }
+      }
+    },
+    { $sort: { totalArticles: -1 } },
+    { $limit: 5 } // Show top 5
+  ];
+  const result = await articlesCollection.aggregate(pipeline).toArray();
+  res.send(result);
+});
+
+
   } catch (err) {
     console.error("❌ MongoDB connection error:", err);
   }
