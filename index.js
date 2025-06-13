@@ -57,23 +57,22 @@ async function run() {
     });
 
     // Top Contributors API (Sorted by number of articles)
-    
+
 app.get('/top-contributors', async (req, res) => {
-  const pipeline = [
+  const contributors = await articlesCollection.aggregate([
     {
       $group: {
-        _id: "$author_email",
-        name: { $first: "$author_name" },
-        photo: { $first: "$author_photo" },
-        totalArticles: { $sum: 1 }
+        _id: "$author_name",
+        totalArticles: { $sum: 1 },
+        photo: { $first: "$author_photo" }
       }
     },
     { $sort: { totalArticles: -1 } },
-    { $limit: 5 } // Show top 5
-  ];
-  const result = await articlesCollection.aggregate(pipeline).toArray();
-  res.send(result);
+    { $limit: 3 }
+  ]).toArray();
+  res.send(contributors);
 });
+
 
 
   } catch (err) {
