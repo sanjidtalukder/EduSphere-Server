@@ -166,6 +166,49 @@ async function run() {
       }
     });
 
+    // DELETE an article by ID
+app.delete('/articles/:id', async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const result = await articlesCollection.deleteOne({ _id: new ObjectId(id) });
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: 'Article not found' });
+    }
+
+    res.json({ message: 'Article deleted successfully' });
+  } catch (error) {
+    console.error('Delete error:', error);
+    res.status(500).json({ message: 'Failed to delete article' });
+  }
+});
+
+// UPDATE an article by ID
+app.put('/articles/:id', async (req, res) => {
+  const id = req.params.id;
+  const updatedData = req.body;
+
+  try {
+    const result = await articlesCollection.updateOne(
+      { _id: new ObjectId(id) },
+      { $set: updatedData }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: 'Article not found' });
+    }
+
+    res.json({ message: 'Article updated successfully' });
+  } catch (error) {
+    console.error('Update error:', error);
+    res.status(500).json({ message: 'Failed to update article' });
+  }
+});
+
+
+
+
   } catch (err) {
     console.error(" MongoDB connection error:", err);
   }
