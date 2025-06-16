@@ -20,13 +20,21 @@ This is the backend/server-side of the **KnowledgeHub** web application. It is b
 
 
 my-eduSphere-server/
+
 ├── node_modules/
+
 ├── .env
+
 ├── .gitignore
+
 ├── package.json
+
 ├── server.js (or index.js)
+
 └── routes/
+
 └── articles.js
+
 └── users.js
 
 
